@@ -3,29 +3,45 @@
 <head>
 <meta charset="UTF-8" />
 <title>586 7th Ave</title>
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+  <!-- Red Pin -->
+  <path fill='red' d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z'/>
+  <!-- Bright White Hole -->
+  <circle cx='12' cy='9' r='2.5' fill='white'/>
+</svg>">
+
 <style>
   html, body {
     margin: 0; padding: 0; height: 100%; overflow: hidden;
     background: #000;
     display: flex; justify-content: center; align-items: center;
   }
+
   iframe {
-    display: none; /* hide until loaded */
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: none;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
     border: none; z-index: 1;
   }
-  /* White spinner */
+
   .spinner {
     position: absolute; z-index: 2;
     width: 60px; height: 60px;
     border-radius: 50%;
     border: 6px solid transparent;
-    border-top-color: #ffffff; /* white */
+    border-top-color: #fff;
     animation: spin 1s linear infinite;
   }
+
   @keyframes spin {
     0% { transform: rotate(0deg) }
     100% { transform: rotate(360deg) }
+  }
+
+  * {
+      user-select: none;
   }
 </style>
 </head>
@@ -35,40 +51,40 @@
 <div class="spinner" id="spinner"></div>
 
 <script>
-  const iframe = document.getElementById('streetview');
-  const spinner = document.getElementById('spinner');
-  const iframeSrc = "https://www.google.com/maps/embed?pb=!4v1764787574561!6m8!1m7!1s-DTuUZuEAel9yw9bk55Hsg!2m2!1d40.75719735368328!2d-73.98608433793873!3f208.42!4f-10.519999999999996!5f0.5970117501821992";
+/* -------------------------------
+   STREET VIEW LOADING
+-------------------------------- */
+const iframe = document.getElementById('streetview');
+const spinner = document.getElementById('spinner');
 
-  // Load the iframe with the source URL
-  function loadIframe() {
-    iframe.src = iframeSrc;
-  }
+const iframeSrc =
+  "https://www.google.com/maps/embed?pb=!4v1764787574561!6m8!1m7!1s-DTuUZuEAel9yw9bk55Hsg!2m2!1d40.75719735368328!2d-73.98608433793873!3f208.42!4f-10.519999999999996!5f0.5970117501821992";
 
-  // When iframe loads successfully, hide spinner and show iframe
-  iframe.addEventListener('load', () => {
-    spinner.style.display = 'none';
-    iframe.style.display = 'block';
-  });
+function loadIframe() {
+  iframe.src = iframeSrc;
+}
 
-  // Retry loading iframe every 1 second if it hasn't loaded yet
-  setInterval(() => {
-    if (iframe.style.display === 'none') {
-      loadIframe();
-    }
-  }, 1000);
+iframe.addEventListener('load', () => {
+  spinner.style.display = 'none';
+  iframe.style.display = 'block';
+});
 
-  // Initial load
-  loadIframe();
+setInterval(() => {
+  if (iframe.style.display === 'none') loadIframe();
+}, 1000);
 
-  // Reload page when connection goes offline
-  window.addEventListener('offline', () => {
-    window.location.reload();
-  });
+loadIframe();
 
-  // Reload page when connection comes back online
-  window.addEventListener('online', () => {
-    window.location.reload();
-  });
+window.addEventListener('offline', () => location.reload());
+window.addEventListener('online', () => location.reload());
+
+/* -------------------------------
+   RIGHT-CLICK WARNING POPUP
+-------------------------------- */
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+    alert("That is disabled");
+});
 </script>
 
 </body>
